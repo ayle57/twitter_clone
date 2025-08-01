@@ -1,0 +1,12 @@
+@use '../config/variables' as *;
+
+body {
+  color: $black900;
+    background-color: $white900;
+
+  font: {
+    family: $mainFontFamily;
+    size: 18px;
+    weight: 400;
+  }
+}
