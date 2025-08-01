@@ -1,0 +1,116 @@
+digraph TwitterClone {
+    node [shape=record, fontsize=12, fontname="Montserrat"];
+    edge [fontname="Montserrat", fontsize=12];
+
+    // Classe User
+    User [label="{User|
+      + id: int\l
+      + firstName: string\l
+      + lastName: string\l
+      + email: string\l
+      + password: string\l
+      + roles: enum::string[]\l
+      + createdAt: DatetimeImmutable\l
+      + updatedAt: DatetimeImmutable\l
+    |
+      + __toString(): string\l
+      + getRole(): string\l
+      + addFriend(friend: User): void\l
+      + removeFriend(friend: User): void\l
+      + hasFriend(friend: User): bool\l
+      + follow(user: User): void\l
+      + unfollow(user: User): void\l
+      + isFollowing(user: User): bool\l
+    }"];
+
+    // Relation de follow entre utilisateurs (User -> User)
+    User -> User [label="follows", dir=both, arrowtail=none, arrowhead=normal, style=dashed];
+
+    // Classe Post (tweet)
+    Post [label="{Post|
+      + id: int\l
+      + content: string\l
+      + author: User\l
+      + createdAt: DatetimeImmutable\l
+      + updatedAt: DatetimeImmutable\l
+    |
+      + __toString(): string\l
+      + getContent(): string\l
+      + setContent(content: string): void\l
+      + getAuthor(): User\l
+      + setAuthor(author: User): void\l
+    }"];
+
+    Post -> User [label="author", arrowhead="onormal"];
+
+    // Classe Comment (réponse à un post)
+    Comment [label="{Comment|
+      + id: int\l
+      + content: string\l
+      + author: User\l
+      + post: Post\l
+      + createdAt: DatetimeImmutable\l
+      + updatedAt: DatetimeImmutable\l
+    |
+      + __toString(): string\l
+      + getContent(): string\l
+      + setContent(content: string): void\l
+      + getAuthor(): User\l
+      + setAuthor(author: User): void\l
+      + getPost(): Post\l
+      + setPost(post: Post): void\l
+    }"];
+
+    Comment -> User [label="author", arrowhead="onormal"];
+    Comment -> Post [label="post", arrowhead="onormal"];
+
+    // Classe Like (pour aimer posts ou commentaires)
+    Like [label="{Like|
+      + id: int\l
+      + user: User\l
+      + post: Post (optionnel)\l
+      + comment: Comment (optionnel)\l
+      + createdAt: DatetimeImmutable\l
+    |
+      + __toString(): string\l
+    }"];
+
+    Like -> User [label="user", arrowhead="onormal"];
+    Like -> Post [label="post", arrowhead="onormal", style=dotted];
+    Like -> Comment [label="comment", arrowhead="onormal", style=dotted];
+
+    // Classe Hashtag
+    Hashtag [label="{Hashtag|
+      + id: int\l
+      + tag: string\l
+    |
+      + __toString(): string\l
+    }"];
+
+    // Association Post - Hashtag (plusieurs hashtags par post)
+    Post -> Hashtag [label="tags", arrowhead="onormal", style=dashed];
+
+    // Classe DirectMessage
+    DirectMessage [label="{DirectMessage|
+      + id: int\l
+      + sender: User\l
+      + receiver: User\l
+      + content: string\l
+      + createdAt: DatetimeImmutable\l
+    |
+      + __toString(): string\l
+    }"];
+
+    DirectMessage -> User [label="sender", arrowhead="onormal"];
+    DirectMessage -> User [label="receiver", arrowhead="onormal"];
+
+    // Classe Follow (relation explicite)
+    Follow [label="{Follow|
+      + follower: User\l
+      + following: User\l
+      + createdAt: DatetimeImmutable\l
+    }"];
+
+    Follow -> User [label="follower", tailport="s", arrowhead="onormal"];
+    Follow -> User [label="following", headport="n", arrowhead="onormal"];
+}
