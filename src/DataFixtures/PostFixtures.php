@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Hashtag;
 use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -20,6 +21,10 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
             $post->setContent($faker->realText(200));
             $post->setCreatedAt(new \DateTimeImmutable());
             $post->setUpdatedAt(new \DateTimeImmutable());
+            for($j = 0; $j < rand(1, 3); $j++) {
+                $hashtag = $this->getReference('hashtag_' . rand(0, 19), Hashtag::class);
+                $post->addTag($hashtag);
+            }
 
             $user = $this->getReference('user_' . rand(1, 10), User::class);
             $post->setAuthor($user);
@@ -33,6 +38,6 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies(): array
     {
-        return [UserFixtures::class];
+        return [UserFixtures::class, HashtagFixtures::class];
     }
 }

@@ -19,6 +19,8 @@ class HashtagFixtures extends Fixture
             $hashtag = new Hashtag();
             $hashtag->setTag($tag);
 
+            $this->addReference("hashtag_$i", $hashtag);
+
             $manager->persist($hashtag);
         }
 
